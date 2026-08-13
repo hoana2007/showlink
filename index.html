@@ -9,6 +9,7 @@
   </head>
   <body>
     <header class="site-header">
+      <div class="header-inner">
       <div class="titles">
         <h1 id="page-title">Link Hub - Website hữu ích</h1>
         <p id="page-subtitle">Tổng hợp liên kết hữu ích</p>
@@ -17,16 +18,31 @@
         <span class="icon" id="theme-icon">☀️</span>
         <span id="theme-label">Ngày</span>
       </button>
+      </div>
     </header>
 
     <main class="container">
+      <div class="search-wrap">
+        <span class="search-icon" aria-hidden="true">🔍</span>
+        <input
+          id="search-input"
+          class="search-input"
+          type="search"
+          placeholder="Tìm kiếm theo tên, mô tả, loại…"
+          aria-label="Tìm kiếm liên kết"
+          autocomplete="off"
+        />
+        <button id="search-clear" class="search-clear" type="button" aria-label="Xóa tìm kiếm" style="display: none">✕</button>
+      </div>
       <div id="status" class="status" style="display: none"></div>
       <div id="controls" class="controls"></div>
       <div id="card-grid" class="card-grid"></div>
     </main>
 
     <footer class="site-footer">
-      &copy; 2026 hoana2007. Link hữu ích dành cho giáo viên, cập nhật liên tục!
+      <div class="footer-inner">
+        &copy; 2026 hoana2007. Link hữu ích dành cho giáo viên, cập nhật liên tục!
+      </div>
     </footer>
 
     <!-- Cấu hình trước, sau đó mới đến logic -->

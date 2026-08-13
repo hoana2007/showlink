@@ -1,5 +1,6 @@
 /* =========================================================================
  * app.js — Tải dữ liệu từ Google Sheet (CSV) và hiển thị dưới dạng thẻ
+ * Các tính năng: lọc theo kind, tìm kiếm, sao chép link, giao diện ngày/đêm
  * ========================================================================= */
 
 (function () {
@@ -13,10 +14,13 @@
     themeToggle: document.getElementById("theme-toggle"),
     themeIcon: document.getElementById("theme-icon"),
     themeLabel: document.getElementById("theme-label"),
+    searchInput: document.getElementById("search-input"),
+    searchClear: document.getElementById("search-clear"),
   };
 
   let allRows = [];
   let activeFilter = "all";
+  let searchQuery = "";
 
   /* ---------- Giao diện: ngày / đêm ---------- */
   const THEME_KEY = "linkhub-theme";
@@ -178,19 +182,43 @@
     }
   }
 
+  /* ---------- Chọn dữ liệu hiển thị (lọc kind + tìm kiếm) ---------- */
+  function getVisibleRows() {
+    const q = searchQuery.trim().toLowerCase();
+    return allRows.filter(function (r) {
+      // lọc theo loại (kind)
+      if (activeFilter !== "all") {
+        const k = (r.kind || "khác").trim().toLowerCase();
+        if (k !== activeFilter) return false;
+      }
+      // lọc theo từ khóa tìm kiếm
+      if (q) {
+        const host = hostOf(r.link).toLowerCase();
+        const haystack = [host, r.link, r.description, r.kind, r.stt]
+          .join(" ")
+          .toLowerCase();
+        if (haystack.indexOf(q) === -1) return false;
+      }
+      return true;
+    });
+  }
+
   /* ---------- Hiển thị ---------- */
   function render() {
-    const rows =
-      activeFilter === "all"
-        ? allRows
-        : allRows.filter(function (r) {
-            const k = (r.kind || "khác").trim().toLowerCase();
-            return k === activeFilter;
-          });
+    const rows = getVisibleRows();
 
     if (!rows.length) {
+      let msg = "Không có dữ liệu để hiển thị.";
+      if (searchQuery.trim()) {
+        msg =
+          'Không tìm thấy kết quả cho "' +
+          escapeHtml(searchQuery.trim()) +
+          '".';
+      } else if (activeFilter !== "all") {
+        msg = "Không có liên kết nào trong mục này.";
+      }
       els.grid.innerHTML =
-        '<p style="color:var(--text-muted)">Không có dữ liệu để hiển thị.</p>';
+        '<p class="empty"> ' + msg + "</p>";
       return;
     }
 
@@ -215,6 +243,14 @@
           host +
           "</a>" +
           (desc ? '<p class="card-desc">' + desc + "</p>" : "") +
+          '<div class="card-actions">' +
+          '<a class="card-link-btn" href="' +
+          escapeHtml(url) +
+          '" target="_blank" rel="noopener noreferrer">🌐 Mở</a>' +
+          '<button class="copy-btn" type="button" data-link="' +
+          escapeHtml(url) +
+          '" aria-label="Sao chép liên kết">📋 Sao chép</button>' +
+          "</div>" +
           "</article>"
         );
       })
@@ -273,6 +309,98 @@
     });
   }
 
+  /* ---------- Sao chép liên kết ---------- */
+  function showCopied(btn) {
+    if (!btn) return;
+    const original = btn.innerHTML;
+    btn.innerHTML = "✓ Đã sao chép";
+    btn.classList.add("copied");
+    setTimeout(function () {
+      btn.innerHTML = original;
+      btn.classList.remove("copied");
+    }, 1500);
+  }
+
+  function fallbackCopy(text, done) {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "fixed";
+    ta.style.top = "-9999px";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand("copy");
+      done();
+    } catch (e) {
+      /* bỏ qua */
+    }
+    document.body.removeChild(ta);
+  }
+
+  function copyLink(text, btn) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(
+        function () {
+          showCopied(btn);
+        },
+        function () {
+          fallbackCopy(text, function () {
+            showCopied(btn);
+          });
+        }
+      );
+    } else {
+      fallbackCopy(text, function () {
+        showCopied(btn);
+      });
+    }
+  }
+
+  function initCopyButtons() {
+    if (!els.grid) return;
+    els.grid.addEventListener("click", function (e) {
+      const btn = e.target.closest(".copy-btn");
+      if (!btn) return;
+      const link = btn.getAttribute("data-link");
+      copyLink(link, btn);
+    });
+  }
+
+  /* ---------- Tìm kiếm ---------- */
+  function initSearch() {
+    if (!els.searchInput) return;
+
+    els.searchInput.addEventListener("input", function () {
+      searchQuery = els.searchInput.value || "";
+      if (els.searchClear) {
+        els.searchClear.style.display = searchQuery ? "block" : "none";
+      }
+      render();
+    });
+
+    if (els.searchClear) {
+      els.searchClear.addEventListener("click", function () {
+        searchQuery = "";
+        els.searchInput.value = "";
+        els.searchClear.style.display = "none";
+        els.searchInput.focus();
+        render();
+      });
+    }
+
+    // Nhấn Esc để xóa tìm kiếm
+    els.searchInput.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") {
+        els.searchInput.value = "";
+        searchQuery = "";
+        if (els.searchClear) els.searchClear.style.display = "none";
+        render();
+      }
+    });
+  }
+
   /* ---------- Trạng thái ---------- */
   function showStatus(message, type) {
     if (!els.status) return;
@@ -318,6 +446,8 @@
   /* ---------- Khởi chạy ---------- */
   document.addEventListener("DOMContentLoaded", function () {
     initTheme();
+    initSearch();
+    initCopyButtons();
     loadData();
 
     const minutes = parseInt(APP_CONFIG.autoRefreshMinutes, 10) || 0;

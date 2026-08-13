@@ -16,6 +16,7 @@
   --shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.04);
   --shadow-hover: 0 4px 10px rgba(0, 0, 0, 0.12), 0 10px 24px rgba(0, 0, 0, 0.08);
   --radius: 14px;
+  --content-width: 1080px;
 }
 
 /* ---- Dark mode ---- */
@@ -58,14 +59,21 @@ body {
   position: sticky;
   top: 0;
   z-index: 10;
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+/* Căn giữa nội dung header theo cùng độ rộng với nội dung trang */
+.header-inner {
+  width: 100%;
+  max-width: var(--content-width);
+  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
   padding: 16px 20px;
-  background: var(--bg-elevated);
-  border-bottom: 1px solid var(--border);
-  box-shadow: var(--shadow);
 }
 
 .site-header .titles h1 {
@@ -108,9 +116,81 @@ body {
 
 /* ---- Bố cục danh sách ---- */
 .container {
-  max-width: 960px;
+  max-width: var(--content-width);
   margin: 0 auto;
-  padding: 24px 16px 64px;
+  padding: 24px 20px 64px;
+}
+
+/* ---- Ô tìm kiếm (đầu trang) ---- */
+.search-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 22px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 14px;
+  font-size: 1rem;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.search-input {
+  width: 100%;
+  padding: 13px 44px 13px 42px;
+  font-size: 1rem;
+  font-family: inherit;
+  color: var(--text);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.search-input::placeholder {
+  color: var(--text-muted);
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+[data-theme="dark"] .search-input:focus {
+  box-shadow: 0 0 0 3px rgba(79, 155, 255, 0.22);
+}
+
+/* Ẩn dấu "x" mặc định của input[type=search] trên một số trình duyệt */
+.search-input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.search-clear {
+  position: absolute;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  font-size: 0.9rem;
+  line-height: 1;
+  color: var(--text-muted);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.search-clear:hover {
+  color: var(--text);
+  border-color: var(--accent);
 }
 
 .controls {
@@ -235,6 +315,73 @@ body {
   color: var(--text);
 }
 
+/* Hành động của thẻ: mở và sao chép link */
+.card .card-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 4px;
+}
+
+.card-link-btn,
+.copy-btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 9px 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-family: inherit;
+  border-radius: 10px;
+  cursor: pointer;
+  text-decoration: none;
+  border: 1px solid var(--border);
+  transition: all 0.18s ease;
+}
+
+.card-link-btn {
+  color: var(--accent-contrast);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.card-link-btn:hover {
+  filter: brightness(1.05);
+}
+
+.copy-btn {
+  color: var(--text);
+  background: var(--bg);
+}
+
+.copy-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.copy-btn.copied {
+  color: #15803d;
+  border-color: #15803d;
+  background: rgba(21, 128, 61, 0.08);
+}
+
+[data-theme="dark"] .copy-btn.copied {
+  color: #4ade80;
+  border-color: #4ade80;
+  background: rgba(74, 222, 128, 0.12);
+}
+
+/* Thông báo khi không có kết quả */
+.card-grid .empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 32px 16px;
+  color: var(--text-muted);
+  font-size: 0.98rem;
+}
+
 /* ---- Trạng thái tải / lỗi ---- */
 .status {
   padding: 14px 18px;
@@ -263,11 +410,17 @@ body {
 
 /* ---- Footer ---- */
 .site-footer {
+  border-top: 1px solid var(--border);
+  background: var(--bg-elevated);
+}
+
+.footer-inner {
+  max-width: var(--content-width);
+  margin: 0 auto;
   text-align: center;
   padding: 20px;
   font-size: 0.8rem;
   color: var(--text-muted);
-  border-top: 1px solid var(--border);
 }
 
 /* ---- Responsive: điện thoại ---- */
@@ -276,16 +429,16 @@ body {
     font-size: 15px;
   }
 
-  .site-header {
+  .header-inner {
     padding: 12px 14px;
   }
 
-  .site-header .titles h1 {
+  .header-inner .titles h1 {
     font-size: 1.15rem;
   }
 
   .container {
-    padding: 16px 12px 48px;
+    padding: 16px 14px 48px;
   }
 
   .card-grid {
@@ -295,5 +448,9 @@ body {
 
   .card {
     padding: 14px;
+  }
+
+  .card .card-actions {
+    flex-direction: column;
   }
 }
