@@ -41,6 +41,12 @@ const APP_CONFIG = {
   // Tự động làm mới dữ liệu sau mỗi N phút (0 = không tự làm mới).
   autoRefreshMinutes: 0,
 
+  // Thứ tự hiển thị theo cột STT:
+  //   "desc" = từ mới đến cũ (STT lớn nhất lên đầu) — mặc định
+  //   "asc"  = từ cũ đến mới (STT nhỏ nhất lên đầu)
+  //   "none" = giữ nguyên thứ tự trong bảng tính
+  sortOrder: "desc",
+
   // Tiêu đề hiển thị trên trang.
   pageTitle: "Link Hub",
   pageSubtitle: "Tổng hợp liên kết hữu ích",

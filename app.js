@@ -155,6 +155,30 @@
     return out;
   }
 
+  /* ---------- Sắp xếp theo STT ---------- */
+  // Hiển thị từ mới đến cũ (STT lớn lên đầu) mặc định.
+  function sortRows(rows) {
+    const order = (APP_CONFIG.sortOrder || "desc").toLowerCase();
+    if (order === "none" || !rows.length) return rows;
+
+    const toNum = function (v) {
+      const n = parseFloat(String(v).trim());
+      return isNaN(n) ? NaN : n;
+    };
+
+    return rows.slice().sort(function (a, b) {
+      const na = toNum(a.stt);
+      const nb = toNum(b.stt);
+      // dòng không có STT (hoặc không phải số) luôn đẩy xuống cuối
+      const aMissing = isNaN(na);
+      const bMissing = isNaN(nb);
+      if (aMissing && bMissing) return 0;
+      if (aMissing) return 1;
+      if (bMissing) return -1;
+      return order === "asc" ? na - nb : nb - na;
+    });
+  }
+
   /* ---------- Tiện ích ---------- */
   function escapeHtml(str) {
     return String(str)
@@ -420,7 +444,7 @@
       }
       const text = await res.text();
       const rawRows = parseCSV(text, APP_CONFIG.delimiter || ",");
-      allRows = mapRows(rawRows);
+      allRows = sortRows(mapRows(rawRows));
 
       if (!allRows.length) {
         showStatus(
