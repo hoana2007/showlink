@@ -1,0 +1,12 @@
+STT,link,description,kind
+2,https://dantri.com.vn,Tin tức cuộc sống,Tin tức
+3,https://tuoitre.vn,Trang tin tức Tuổi trẻ,Tin tức
+4,https://quantrimang.com,Tin tức Công nghệ,Công nghệ
+5,https://learning-arena-hoana2007.vercel.app/,"Phần mềm có thể Tạo nhóm, phân nhóm, nhập số lượng câu hỏi và tạo bảng đấu trường cho từng nhóm. Tổng kết có màn hình trình chiếu đề Giáo viên, Học sinh có thể xem xét lại.",Giáo viên
+6,https://create-post-card-hoana2007.vercel.app/,Nhập tên học sinh cách nhau bởi 1 dấu cách. Chọn kiểu postcard và tạo ra Postcard đẹp mắt. Có thể giúp Giáo viên tải từng Postcard hoặc tải toàn bộ thông qua chức năng Xuất ZIP.,Giáo viên
+7,https://create-rand-group-hoana2007.vercel.app/,"Tạo nhóm ngẫu nhiên: Nhập tên Học sinh, chọn phương pháp chia, số lượng nhóm muốn tạo. Phần mềm sẽ chia ra các nhóm theo yêu cầu.",Giáo viên
+8,https://randname-hoana2007.vercel.app/,"Phần mềm giúp giáo viên Gọi tên học sinh ngẫu nhiên. Giáo viên cần nhập tên học sinh, mỗi tên cách nhau bởi dấu phảy. Sau đó chọn gọi ngẫu nhiên.",Giáo viên
+9,https://linkqr-hoana2007.vercel.app/,Phần mềm sẽ giúp rút ngắn link và tạo QR code để chia sẻ và truy cập dễ dàng.,Giáo viên
+10,https://xucxac-hoana2007.vercel.app/,"Tạo đấu trường xúc xắc. Thêm người chơi, chọn màu xúc xắc và phần mềm sẽ hiển thị Tham chiếu. Bấm: Bắt đầu đấu trường để bắt đầu chơi.",Công cụ
+11,https://sgk-tin12-thud-hoana2007.vercel.app/,Gồm 11 code trong bài học ở SGK Tin học 12 - Tin học Ứng dụng.,Giáo viên
+12,https://github.com/tw93/pake,"Turn any webpage into a desktop app with one command, supports macOS, Windows, and Linux",Công nghệ

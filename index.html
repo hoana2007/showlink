@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Tổng hợp liên kết từ Google Sheet" />
+    <title>Website hữu ích</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="titles">
+        <h1 id="page-title">Link Hub - Website hữu ích</h1>
+        <p id="page-subtitle">Tổng hợp liên kết hữu ích</p>
+      </div>
+      <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Chuyển giao diện">
+        <span class="icon" id="theme-icon">☀️</span>
+        <span id="theme-label">Ngày</span>
+      </button>
+    </header>
+
+    <main class="container">
+      <div id="status" class="status" style="display: none"></div>
+      <div id="controls" class="controls"></div>
+      <div id="card-grid" class="card-grid"></div>
+    </main>
+
+    <footer class="site-footer">
+      &copy; 2026 hoana2007. Link hữu ích dành cho giáo viên, cập nhật liên tục!
+    </footer>
+
+    <!-- Cấu hình trước, sau đó mới đến logic -->
+    <script src="config.js"></script>
+    <script>
+      // Cập nhật tiêu đề / phụ đề từ config (nếu có)
+      if (window.APP_CONFIG) {
+        if (APP_CONFIG.pageTitle) {
+          document.title = APP_CONFIG.pageTitle;
+          document.getElementById("page-title").textContent = APP_CONFIG.pageTitle;
+        }
+        if (APP_CONFIG.pageSubtitle) {
+          document.getElementById("page-subtitle").textContent = APP_CONFIG.pageSubtitle;
+        }
+      }
+    </script>
+    <script src="app.js"></script>
+  </body>
+</html>
